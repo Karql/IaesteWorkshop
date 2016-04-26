@@ -1,4 +1,5 @@
-﻿
+﻿@using IaesteWorkshop.Models
+@model IEnumerable<IaesteWorkshop.Models.Movie>
 @{
     ViewBag.Title = "Reviews";
 }
@@ -7,307 +8,95 @@
     <div class="reviews-section">
         <h3 class="head">Movie Reviews</h3>
         <div class="col-md-9 reviews-grids">
-            <div class="review">
-                <div class="movie-pic">
-                    <a href="single"><img src="~/images/r4.jpg" alt="" /></a>
-                </div>
-                <div class="review-info">
-                    <a class="span" href="single">Lorem  <i>Movie Review</i></a>
-                    <p class="dirctr"><a href="">Reagan Gavin Rasquinha, </a>TNN, Mar 12, 2015, 12.47PM IST</p>
-                    <p class="ratingview">Critic's Rating:</p>
-                    <div class="rating">
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
+            @{
+                var id = 0;
+            }
+            @foreach (var movie in Model)
+            {
+                id++;
+                <div class="review">
+                    <div class="movie-pic">
+                        <a href="@Url.Action("Single", "Home", new {id = movie.Id})">
+                            @if (movie.CoverImage != null)
+                            {
+
+                                <img src="@Url.Action("Index", "MovieFile", new { id = movie.CoverImage.MovieId })" width="369" height="369" alt="cover image" />
+                            }
+                            else
+                            {
+                                <img src="~/images/gridallbum1.jpg" title="allbum-name" />
+                            }
+                        </a>
                     </div>
-                    <p class="ratingview">
-                        &nbsp;3.5/5
-                    </p>
+                    <div class="review-info">
+                        @{
+                            var expertReview = movie.Reviews.FirstOrDefault(x => x.ReviewType == MoviewReviewType.Expert);
+                            if (expertReview != null)
+                            {
+                                var reviewScore = ((int)expertReview.Rating) / 2;
+                                <p class="ratingview">Critic's Rating:</p>
+                                <div class="rating">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <span class="@(i <= reviewScore ? "active" : String.Empty)">☆</span>
+                                    }
+                                </div>
+                                <p class="ratingview">
+                                    &nbsp;@(String.Format("{0:N2}", reviewScore)) /5
+                                </p>
+                                <div class="clearfix"></div>
+                            }
+
+                            if (movie.Reviews.Any(x => x.ReviewType == MoviewReviewType.Reader))
+                            {
+                                var readerReview = movie.Reviews.Average(x => ((int)x.Rating) / 2);
+
+                                <p class="ratingview c-rating">Avg Readers' Rating:</p>
+                                <div class="rating c-rating">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <span class="@(i <= readerReview ? "active" : String.Empty)">☆</span>
+                                    }
+                                </div>
+                                <p class="ratingview c-rating">
+                                    &nbsp;@(String.Format("{0:N2}", readerReview)) /5
+                                </p>
+                                <div class="clearfix"></div>
+                            }
+                        }
+
+                        <div class="yrw">
+                            <div class="dropdown-button">
+                                <select class="dropdown" tabindex="9" data-settings='{"wrapperClass":"flat"}'>
+                                    <option value="0">Your rating</option>
+                                    <option value="1">1.Poor</option>
+                                    <option value="2">1.5(Below average)</option>
+                                    <option value="3">2.Average</option>
+                                    <option value="4">2.5(Above average)</option>
+                                    <option value="5">3.Watchable</option>
+                                    <option value="6">3.5(Good)</option>
+                                    <option value="7">4.5(Very good)</option>
+                                    <option value="8">5.Outstanding</option>
+                                </select>
+                            </div>
+                            <div class="rtm text-center">
+                                <a href="#">REVIEW THIS MOVIE</a>
+                            </div>
+                            <div class="wt text-center">
+                                <a href="#">WATCH THIS TRAILER</a>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <p class="info">CAST:&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@movie.Cast>()</p>
+                        <p class="info">DIRECTION: &nbsp;&nbsp;&nbsp;&nbsp;@movie.Direction</p>
+                        <p class="info">GENRE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @movie.Genre</p>
+                        <p class="info">DURATION:&nbsp;&nbsp;&nbsp; &nbsp; @movie.Duration</p>
+                    </div>
                     <div class="clearfix"></div>
-                    <p class="ratingview c-rating">Avg Readers' Rating:</p>
-                    <div class="rating c-rating">
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                    </div>
-                    <p class="ratingview c-rating">
-                        &nbsp; 3.3/5
-                    </p>
-                    <div class="clearfix"></div>
-                    <div class="yrw">
-                        <div class="dropdown-button">
-                            <select class="dropdown" tabindex="9" data-settings='{"wrapperClass":"flat"}'>
-                                <option value="0">Your rating</option>
-                                <option value="1">1.Poor</option>
-                                <option value="2">1.5(Below average)</option>
-                                <option value="3">2.Average</option>
-                                <option value="4">2.5(Above average)</option>
-                                <option value="5">3.Watchable</option>
-                                <option value="6">3.5(Good)</option>
-                                <option value="7">4.5(Very good)</option>
-                                <option value="8">5.Outstanding</option>
-                            </select>
-                        </div>
-                        <div class="rtm text-center">
-                            <a href="#">REVIEW THIS MOVIE</a>
-                        </div>
-                        <div class="wt text-center">
-                            <a href="#">WATCH THIS TRAILER</a>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-                    <p class="info">CAST:&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Will Smith, Margot Robbie, Adrian Martinez, Rodrigo Santoro, BD Wong, Robert Taylor</p>
-                    <p class="info">DIRECTION: &nbsp;&nbsp;&nbsp;&nbsp;Glenn Ficarra, John Requa</p>
-                    <p class="info">GENRE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Crime</p>
-                    <p class="info">DURATION:&nbsp;&nbsp;&nbsp; &nbsp; 1 hour 45 minutes</p>
                 </div>
-                <div class="clearfix"></div>
-            </div>
-            <div class="review">
-                <div class="movie-pic">
-                    <a href="single"><img src="~/images/r6.jpg" alt="" /></a>
-                </div>
-                <div class="review-info">
-                    <a class="span" href="single">Lorem  <i>Movie Review</i></a>
-                    <p class="dirctr"><a href="">Reagan Gavin Rasquinha, </a>TNN, Mar 12, 2015, 12.47PM IST</p>
-                    <p class="ratingview">Critic's Rating:</p>
-                    <div class="rating">
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                    </div>
-                    <p class="ratingview">
-                        &nbsp;3.5/5
-                    </p>
-                    <div class="clearfix"></div>
-                    <p class="ratingview c-rating">Avg Readers' Rating:</p>
-                    <div class="rating c-rating">
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                    </div>
-                    <p class="ratingview c-rating">
-                        &nbsp; 3.3/5
-                    </p>
-                    <div class="clearfix"></div>
-                    <div class="yrw">
-                        <div class="dropdown-button">
-                            <select class="dropdown" tabindex="9" data-settings='{"wrapperClass":"flat"}'>
-                                <option value="0">Your rating</option>
-                                <option value="1">1.Poor</option>
-                                <option value="2">1.5(Below average)</option>
-                                <option value="3">2.Average</option>
-                                <option value="4">2.5(Above average)</option>
-                                <option value="5">3.Watchable</option>
-                                <option value="6">3.5(Good)</option>
-                                <option value="7">4.5(Very good)</option>
-                                <option value="8">5.Outstanding</option>
-                            </select>
-                        </div>
-                        <div class="rtm text-center">
-                            <a href="#">REVIEW THIS MOVIE</a>
-                        </div>
-                        <div class="wt text-center">
-                            <a href="#">WATCH THIS TRAILER</a>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-                    <p class="info">CAST:&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Will Smith, Margot Robbie, Adrian Martinez, Rodrigo Santoro, BD Wong, Robert Taylor</p>
-                    <p class="info">DIRECTION: &nbsp;&nbsp;&nbsp;&nbsp;Glenn Ficarra, John Requa</p>
-                    <p class="info">GENRE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Crime</p>
-                    <p class="info">DURATION:&nbsp;&nbsp;&nbsp; &nbsp; 1 hour 45 minutes</p>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-            <div class="review">
-                <div class="movie-pic">
-                    <a href="single"><img src="~/images/r5.jpg" alt="" /></a>
-                </div>
-                <div class="review-info">
-                    <a class="span" href="single">Lorem  <i>Movie Review</i></a>
-                    <p class="dirctr"><a href="">Reagan Gavin Rasquinha, </a>TNN, Mar 12, 2015, 12.47PM IST</p>
-                    <p class="ratingview">Critic's Rating:</p>
-                    <div class="rating">
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                    </div>
-                    <p class="ratingview">
-                        &nbsp;3.5/5
-                    </p>
-                    <div class="clearfix"></div>
-                    <p class="ratingview c-rating">Avg Readers' Rating:</p>
-                    <div class="rating c-rating">
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                    </div>
-                    <p class="ratingview c-rating">
-                        &nbsp; 3.3/5
-                    </p>
-                    <div class="clearfix"></div>
-                    <div class="yrw">
-                        <div class="dropdown-button">
-                            <select class="dropdown" tabindex="9" data-settings='{"wrapperClass":"flat"}'>
-                                <option value="0">Your rating</option>
-                                <option value="1">1.Poor</option>
-                                <option value="2">1.5(Below average)</option>
-                                <option value="3">2.Average</option>
-                                <option value="4">2.5(Above average)</option>
-                                <option value="5">3.Watchable</option>
-                                <option value="6">3.5(Good)</option>
-                                <option value="7">4.5(Very good)</option>
-                                <option value="8">5.Outstanding</option>
-                            </select>
-                        </div>
-                        <div class="rtm text-center">
-                            <a href="#">REVIEW THIS MOVIE</a>
-                        </div>
-                        <div class="wt text-center">
-                            <a href="#">WATCH THIS TRAILER</a>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-                    <p class="info">CAST:&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Will Smith, Margot Robbie, Adrian Martinez, Rodrigo Santoro, BD Wong, Robert Taylor</p>
-                    <p class="info">DIRECTION: &nbsp;&nbsp;&nbsp;&nbsp;Glenn Ficarra, John Requa</p>
-                    <p class="info">GENRE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Crime</p>
-                    <p class="info">DURATION:&nbsp;&nbsp;&nbsp; &nbsp; 1 hour 45 minutes</p>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-            <div class="review">
-                <div class="movie-pic">
-                    <a href="single"><img src="~/images/r1.jpg" alt="" /></a>
-                </div>
-                <div class="review-info">
-                    <a class="span" href="single">Lorem  <i>Movie Review</i></a>
-                    <p class="dirctr"><a href="">Reagan Gavin Rasquinha, </a>TNN, Mar 12, 2015, 12.47PM IST</p>
-                    <p class="ratingview">Critic's Rating:</p>
-                    <div class="rating">
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                    </div>
-                    <p class="ratingview">
-                        &nbsp;3.5/5
-                    </p>
-                    <div class="clearfix"></div>
-                    <p class="ratingview c-rating">Avg Readers' Rating:</p>
-                    <div class="rating c-rating">
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                    </div>
-                    <p class="ratingview c-rating">
-                        &nbsp; 3.3/5
-                    </p>
-                    <div class="clearfix"></div>
-                    <div class="yrw">
-                        <div class="dropdown-button">
-                            <select class="dropdown" tabindex="9" data-settings='{"wrapperClass":"flat"}'>
-                                <option value="0">Your rating</option>
-                                <option value="1">1.Poor</option>
-                                <option value="2">1.5(Below average)</option>
-                                <option value="3">2.Average</option>
-                                <option value="4">2.5(Above average)</option>
-                                <option value="5">3.Watchable</option>
-                                <option value="6">3.5(Good)</option>
-                                <option value="7">4.5(Very good)</option>
-                                <option value="8">5.Outstanding</option>
-                            </select>
-                        </div>
-                        <div class="rtm text-center">
-                            <a href="#">REVIEW THIS MOVIE</a>
-                        </div>
-                        <div class="wt text-center">
-                            <a href="#">WATCH THIS TRAILER</a>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-                    <p class="info">CAST:&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Will Smith, Margot Robbie, Adrian Martinez, Rodrigo Santoro, BD Wong, Robert Taylor</p>
-                    <p class="info">DIRECTION: &nbsp;&nbsp;&nbsp;&nbsp;Glenn Ficarra, John Requa</p>
-                    <p class="info">GENRE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Crime</p>
-                    <p class="info">DURATION:&nbsp;&nbsp;&nbsp; &nbsp; 1 hour 45 minutes</p>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-            <div class="review">
-                <div class="movie-pic">
-                    <a href="single"><img src="~/images/r3.jpg" alt="" /></a>
-                </div>
-                <div class="review-info">
-                    <a class="span" href="single">Lorem  <i>Movie Review</i></a>
-                    <p class="dirctr"><a href="">Reagan Gavin Rasquinha, </a>TNN, Mar 12, 2015, 12.47PM IST</p>
-                    <p class="ratingview">Critic's Rating:</p>
-                    <div class="rating">
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                    </div>
-                    <p class="ratingview">
-                        &nbsp;3.5/5
-                    </p>
-                    <div class="clearfix"></div>
-                    <p class="ratingview c-rating">Avg Readers' Rating:</p>
-                    <div class="rating">
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                        <span>☆</span>
-                    </div>
-                    <p class="ratingview">
-                        &nbsp; 3.3/5
-                    </p>
-                    <div class="clearfix"></div>
-                    <div class="yrw">
-                        <div class="dropdown-button">
-                            <select class="dropdown" tabindex="9" data-settings='{"wrapperClass":"flat"}'>
-                                <option value="0">Your rating</option>
-                                <option value="1">1.Poor</option>
-                                <option value="2">1.5(Below average)</option>
-                                <option value="3">2.Average</option>
-                                <option value="4">2.5(Above average)</option>
-                                <option value="5">3.Watchable</option>
-                                <option value="6">3.5(Good)</option>
-                                <option value="7">4.5(Very good)</option>
-                                <option value="8">5.Outstanding</option>
-                            </select>
-                        </div>
-                        <div class="rtm text-center">
-                            <a href="#">REVIEW THIS MOVIE</a>
-                        </div>
-                        <div class="wt text-center">
-                            <a href="#">WATCH THIS TRAILER</a>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-                    <p class="info">CAST:&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Will Smith, Margot Robbie, Adrian Martinez, Rodrigo Santoro, BD Wong, Robert Taylor</p>
-                    <p class="info">DIRECTION: &nbsp;&nbsp;&nbsp;&nbsp;Glenn Ficarra, John Requa</p>
-                    <p class="info">GENRE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Crime</p>
-                    <p class="info">DURATION:&nbsp;&nbsp;&nbsp; &nbsp; 1 hour 45 minutes</p>
-                </div>
-                <div class="clearfix"></div>
-            </div>
+                                }
         </div>
+
         <div class="col-md-3 side-bar">
             <div class="featured">
                 <h3>Featured Today in Movie Reviews</h3>
@@ -465,12 +254,13 @@
 
         <div class="clearfix"></div>
     </div>
+
+    @{ Html.RenderPartial("_Flexisel");  }
+
+
 </div>
-
-@{ Html.RenderPartial("_Flexisel");  }
-   
-
 @section scripts
 {
     @{ Html.RenderPartial("_FlexiselScripts");  }
 }
+
