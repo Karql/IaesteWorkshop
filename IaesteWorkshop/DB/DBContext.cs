@@ -14,11 +14,23 @@ namespace IaesteWorkshop.DB
     {
 
         public DbSet<Movie> Movies { get; set; }
+        public DbSet<MovieFile> MovieFiles { get; set; }
+        public DbSet<MovieReview> MovieReviews { get; set; }
 
         public DBContext()
-            :base("name=DefaultConnection")
+            : base("name=DefaultConnection")
         {
 
+        }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Movie>()
+                        .HasOptional(s => s.CoverImage)
+                        .WithRequired(ad => ad.Movie);
+
+
+            base.OnModelCreating(modelBuilder);
         }
 
     }

@@ -19,6 +19,8 @@ namespace IaesteWorkshop.Models
         [Required]
         public string Description { get; set; }
 
+        public virtual MovieFile CoverImage { get; set; }
+
         public string TrailerUrl { get; set; }
 
         [Required]
@@ -33,5 +35,7 @@ namespace IaesteWorkshop.Models
         [Required]
         [DataType(System.ComponentModel.DataAnnotations.DataType.Time)]
         public TimeSpan Duration { get; set; }
+
+        public virtual ICollection<MovieReview> Reviews { get; set; }
     }
 }
