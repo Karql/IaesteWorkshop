@@ -1,0 +1,29 @@
+﻿@model IaesteWorkshop.Models.MovieReview
+@using (Html.BeginForm("Create", "MovieReviews",
+    new { returnUrl = ViewBag.returnUrl },
+    FormMethod.Post,
+    new { id = "loginForm" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.MovieId)
+    @Html.HiddenFor(x => x.ReviewType)
+    <div class="dropdown-button">
+        @Html.EnumDropDownListFor(x => x.Rating, htmlAttributes: new { @class = "dropdown", tabindex = "10" })
+    </div>
+    @*
+            <select class="dropdown" tabindex="9" data-settings='{"wrapperClass":"flat"}'>
+               <option value="0">Your rating</option>
+                    <option value="1">1.Poor</option>
+                    <option value="2">1.5(Below average)</option>
+                    <option value="3">2.Average</option>
+                    <option value="4">2.5(Above average)</option>
+                    <option value="5">3.Watchable</option>
+                    <option value="6">3.5(Good)</option>
+                    <option value="7">4.5(Very good)</option>
+                    <option value="8">5.Outstanding</option>
+            </select>
+        </div>*@
+    <div class="rtm text-center">
+        <button type="submit">REVIEW THIS MOVIE</button>
+    </div>
+}
