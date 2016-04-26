@@ -1,0 +1,10 @@
+﻿
+<div class="menu">
+    <ul>
+        <li><a class="@(ViewBag.MenuItem == "index" ? "active" : "" )" href="@Url.Action("Index","Home")"><div class="hm"><i class="home1"></i><i class="home2"></i></div></a></li>
+        <li><a class="@(ViewBag.MenuItem == "videos" ? "active" : "" )" href="@Url.Action("Videos","Home")"><div class="video"><i class="videos"></i><i class="videos1"></i></div></a></li>
+        <li><a class="@(ViewBag.MenuItem == "reviews" ? "active" : "" )" href="@Url.Action("Reviews","Home")"><div class="cat"><i class="watching"></i><i class="watching1"></i></div></a></li>
+        <li><a class="@(ViewBag.MenuItem == "404" ? "active" : "" )" href="@Url.Action("404","Home")"><div class="bk"><i class="booking"></i><i class="booking1"></i></div></a></li>
+        <li><a class="@(ViewBag.MenuItem == "contact" ? "active" : "" )" href="@Url.Action("Contact","Home")"><div class="cnt"><i class="contact"></i><i class="contact1"></i></div></a></li>
+    </ul>
+</div>
