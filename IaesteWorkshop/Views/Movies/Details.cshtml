@@ -5,12 +5,26 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
-
-<div>
-    <h4>Movie</h4>
-    <hr />
+<div class="right-content">
+    <div class="right-content-heading">
+        <div class="right-content-heading-left">
+            <h3 class="head">Movies Details</h3>
+        </div>
+    </div>
     <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CoverImage.FileName)
+        </dt>
+
+        <dd>
+            @if (Model.CoverImage != null)
+            {
+                <img src="~/MovieFile?id=@Model.CoverImage.MovieId" alt="cover image" />
+                        <br />
+            }
+            @Html.DisplayFor(model => model.CoverImage.FileName)
+        </dd>
+
         <dt>
             @Html.DisplayNameFor(model => model.Title)
         </dt>
@@ -68,8 +82,9 @@
         </dd>
 
     </dl>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+

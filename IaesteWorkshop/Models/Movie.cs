@@ -37,5 +37,7 @@ namespace IaesteWorkshop.Models
         public TimeSpan Duration { get; set; }
 
         public virtual ICollection<MovieReview> Reviews { get; set; }
+
+        public virtual ICollection<MovieComment> Comments { get; set; }
     }
 }

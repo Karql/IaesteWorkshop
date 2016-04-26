@@ -13,9 +13,11 @@ namespace IaesteWorkshop.DB
     public class DBContext : DbContext
     {
 
+
         public DbSet<Movie> Movies { get; set; }
         public DbSet<MovieFile> MovieFiles { get; set; }
         public DbSet<MovieReview> MovieReviews { get; set; }
+        public DbSet<MovieComment> MovieComments { get; set; }
 
         public DBContext()
             : base("name=DefaultConnection")

@@ -7,13 +7,13 @@ namespace IaesteWorkshop.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class AddReviews : IMigrationMetadata
+    public sealed partial class CreateMovies : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddReviews));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(CreateMovies));
         
         string IMigrationMetadata.Id
         {
-            get { return "201604261230169_AddReviews"; }
+            get { return "201604251134403_CreateMovies"; }
         }
         
         string IMigrationMetadata.Source

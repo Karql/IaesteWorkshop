@@ -8,19 +8,6 @@ namespace IaesteWorkshop.Migrations
         public override void Up()
         {
             CreateTable(
-                "dbo.MovieFiles",
-                c => new
-                    {
-                        MovieId = c.Int(nullable: false),
-                        FileName = c.String(maxLength: 255),
-                        ContentType = c.String(maxLength: 100),
-                        Content = c.Binary(),
-                    })
-                .PrimaryKey(t => t.MovieId)
-                .ForeignKey("dbo.Movies", t => t.MovieId)
-                .Index(t => t.MovieId);
-            
-            CreateTable(
                 "dbo.MovieReviews",
                 c => new
                     {
@@ -41,11 +28,8 @@ namespace IaesteWorkshop.Migrations
         public override void Down()
         {
             DropForeignKey("dbo.MovieReviews", "MovieId", "dbo.Movies");
-            DropForeignKey("dbo.MovieFiles", "MovieId", "dbo.Movies");
             DropIndex("dbo.MovieReviews", new[] { "MovieId" });
-            DropIndex("dbo.MovieFiles", new[] { "MovieId" });
             DropTable("dbo.MovieReviews");
-            DropTable("dbo.MovieFiles");
         }
     }
 }
