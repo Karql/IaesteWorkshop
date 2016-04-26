@@ -4,5 +4,6 @@ module app.movieComments {
 
     angular.module("app.movieComments", [])
         .service("app.movieComments.CommentsService", CommentsService)
-        .controller("app.movieComments.CommentsController", CommentsCtrl);
+        .controller("app.movieComments.CommentsController", CommentsCtrl)
+        .directive("ngMovieComment", MovieCommentDirective);
 } 

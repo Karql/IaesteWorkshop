@@ -38,6 +38,7 @@ namespace IaesteWorkshop
             bundles.Add(new ScriptBundle("~/bundles/movieComments").Include(
                     "~/Scripts/app/movie-comments/movie-comments.service.js",
                     "~/Scripts/app/movie-comments/movie-comments.controller.js",
+                    "~/Scripts/app/movie-comments/movie-comments.directive.js",
                     "~/Scripts/app/movie-comments/movie-comments.module.js"
                     ));
         }
