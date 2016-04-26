@@ -1180,7 +1180,9 @@ font-weight: 700;
 .reply-section{
 	padding:2em 0;
 }
-.blog-form input[type="text"], textarea {
+.blog-form input[type="text"]
+, .blog-form input[type="email"]
+, textarea {
 	width: 100%;
 	padding: 9px;
 	border-radius: 5px;

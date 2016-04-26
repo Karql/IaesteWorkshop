@@ -30,6 +30,16 @@ namespace IaesteWorkshop
                       "~/Content/site.css",
                       "~/Content/popuo-box.css",
                       "~/Content/style.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/angularjs").Include(
+                      "~/Scripts/angular.js*"));
+
+
+            bundles.Add(new ScriptBundle("~/bundles/movieComments").Include(
+                    "~/Scripts/app/movie-comments/movie-comments.service.js",
+                    "~/Scripts/app/movie-comments/movie-comments.controller.js",
+                    "~/Scripts/app/movie-comments/movie-comments.module.js"
+                    ));
         }
     }
 }
