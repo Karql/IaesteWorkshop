@@ -1,0 +1,215 @@
+Step 1.
+1. Create Movies.cs
+2. Create DBContext.cs
+3. migrations 
+  Enable-Migrations -ContextTypeName IaesteWorkshop.DB.DBContext
+  Add-Migration 'CreateMovies'
+  Update-Database
+4. Add controller mvc
+5. Fire!
+6.** add adnotation 
+    [DataType(System.ComponentModel.DataAnnotations.DataType.Time)]
+
+Step 2.
+1. Copy scripts
+2. Copy styles
+3. Copy images
+4. Views
+4. Layout & Partials
+
+Step 3.
+1. Show layout
+2. Render few movies
+3. Add pagination
+
+public async Task<ActionResult> Videos(int? page = null)
+{
+    ViewBag.MenuItem = "videos";
+
+    int pageNumber = Math.Max(1, page ?? 1);
+    int pageSize = 12;
+
+    var moviesQ = db.Movies.Include(x => x.CoverImage).OrderByDescending(x => x.Id);
+
+    ViewBag.CurrentPage = pageNumber;
+    ViewBag.TotalPages = (await moviesQ.CountAsync() + pageSize - 1) / pageSize;
+
+    var model = await moviesQ
+        .Skip((pageNumber - 1) * pageSize)
+        .Take(pageSize)
+        .ToListAsync();
+
+    return View(model);
+}
+
+@model IEnumerable<IaesteWorkshop.Models.Movie>
+
+@foreach (var m in Model)
+{
+    <div class="content-grid">
+
+        <a class="play-icon popup-with-zoom-anim" href="#small-dialog-@m.Id">
+            @if (m.CoverImage != null)
+            {
+                <img src="@Url.Action("Index", "MovieFile", new { id=m.Id})" width="369" height="369" title="allbum-name" />
+            }
+
+            else
+            {
+                <img src="~/images/gridallbum1.jpg" title="allbum-name" />
+            }
+        </a>
+
+        <h3>@m.Title</h3>
+        <ul>
+            <li><a href="#"><img src="~/images/likes.png" title="image-name" /></a></li>
+            <li><a href="#"><img src="~/images/views.png" title="image-name" /></a></li>
+            <li><a href="#"><img src="~/images/link.png" title="image-name" /></a></li>
+        </ul>
+
+        <a class="button play-icon popup-with-zoom-anim" href="#small-dialog-@m.Id">Watch now</a>
+    </div>
+    if (String.IsNullOrEmpty(m.TrailerUrl))
+    {
+        <div id="small-dialog-@m.Id" class="mfp-hide">
+            <iframe src="@m.TrailerUrl" frameborder="0" allowfullscreen></iframe>
+        </div>
+    }
+
+    else
+    {
+        <div id="small-dialog-@m.Id" class="mfp-hide">
+            <div style="padding: 50px; background: #fff; color: #000">Sorry no trailer :(</div>
+        </div>
+    }
+}
+
+@{
+    var currentPage = (int)ViewBag.CurrentPage;
+    var totalPages = (int)ViewBag.TotalPages;
+
+    if (currentPage > 1)
+    {
+        <li>@Html.ActionLink("Prev", "Videos", new { page = currentPage - 1 })</li>
+    }
+
+    for (var i = 1; i <= totalPages; ++i)
+    {
+        <li>@Html.ActionLink(i.ToString(), "Videos", new { page = i }, new { @class = i == currentPage ? "active" : String.Empty })</li>
+    }
+
+    if (currentPage < totalPages)
+    {
+        <li>@Html.ActionLink("Next", "Videos", new { page = currentPage + 1 })</li>
+    }
+}
+
+
+Step 4.
+1. Install angular, create bundle
+2. Install jquery.TypeScript.DefinitelyTyped
+3. Install angularjs.TypeScript.DefinitelyTyped
+4. add ng-app, show two-way-data-binding (input with ngModel)
+5. Add module app.movieComments, create bundle
+	ng-controller="app.movieComments.CommentsController as ctrl" ng-init="ctrl.init(@Model.Id)"
+
+	@section scripts
+	{
+		@Scripts.Render("~/bundles/angularjs", "~/bundles/movieComments")
+		<script type="text/javascript">
+			angular.module("app", ["app.movieComments"]);
+		</script>
+		@{ Html.RenderPartial("_FlexiselScripts");  }
+	}
+6. Add webApi MovieCommentsController, register routes (!important! before RouteConfig.RegisterRoutes(RouteTable.Routes))
+  GlobalConfiguration.Configure(WebApiConfig.Register);
+7. Add service, load comments
+	export interface ICommentsService {
+        getComments(movieId: number): ng.IPromise<CommentModel[]>;
+        addComment(commentModel: CommentModel): ng.IPromise<boolean>;
+    }
+
+    export class CommentsService implements ICommentsService {
+
+        static $inject = ["$http"];
+        constructor(protected $http : ng.IHttpService) {
+
+        }
+        
+
+        getComments = (movieId: number):ng.IPromise<CommentModel[]> => {
+            return this.$http.get("/api/MovieComments/" + movieId)
+                .then(x => {
+                    return x.data;
+                });
+        }   
+
+        addComment = (commentModel: CommentModel): ng.IPromise<boolean> => {
+            commentModel.CreateTime = new Date();
+            return this.$http.post("/api/MovieComments/",JSON.stringify(commentModel))
+                .then(x=> {
+                return true;
+            });
+        }
+    }
+8. Create ngForm to add comments
+	<form name="form" novalidate>
+		<div ng-show="form.$submitted || form.uEmail.$touched">
+			<span class="text-danger field-validation-error" ng-show="form.AuthorName.$error.required">Tell us your name.</span>
+		</div>
+		<input type="text" class="text" placeholder="Enter Name" name="AuthorName" ng-model="ctrl.addCommentModel.AuthorName" required="">
+
+		<div ng-show="form.$submitted || form.uEmail.$touched">
+			<span class="text-danger field-validation-error" ng-show="form.AuthorEmail.$error.required">Tell us your email.</span>
+			<span class="text-danger field-validation-error" ng-show="form.AuthorEmail.$error.email">This is not correct email.</span>
+		</div>
+		<input type="email" class="text" placeholder="Enter Email" name="AuthorEmail" ng-model="ctrl.addCommentModel.AuthorEmail" required="">
+
+		<div ng-show="form.$submitted || form.uEmail.$touched">
+			<span class="text-danger field-validation-error" ng-show="form.Comment.$error.required">Comment is required</span>
+		</div>
+		<textarea ng-model="ctrl.addCommentModel.Comment" name="Comment" required=""></textarea>
+
+
+		<input type="submit" ng-click="ctrl.addComment(form)" value="SUBMIT COMMENT" />
+	</form>
+9. Create directive for comment
+ export interface IMovieCommentsDirectiveScope extends ng.IScope {
+        comment: CommentModel;
+    }
+
+    export function MovieCommentDirective(): ng.IDirective {
+        return {
+            template: `<div class="col-md-2 comments-section-grid-image">
+                    <img src="/images/eye-brow.jpg" class="img-responsive" alt="" />
+                </div>
+                <div class="col-md-10 comments-section-grid-text">
+                    <h4><a href="#">{{comment.AuthorName}}</a></h4>
+                    <label>{{comment.CreateTime}}</label>
+                    <p>{{comment.Comment}}</p>
+                    <span><a href="#">Reply</a></span>
+                    <i class="rply-arrow"></i>
+                </div>`,
+            scope: {
+                comment: "=ngMovieComment"
+            },
+            link: (scope: app.movieComments.IMovieCommentsDirectiveScope) => {
+
+            },
+        };
+    }
+
+
+
+
+*** Git ***
+
+git clone https://github.com/Karql/IaesteWorkshop.git - pobranie repozytorium
+git branch -r - lista gałęzi
+git checkout Step1 - przełączenie się do gałęzi
+git checkout -b my_step1 - utworzenie nowego brancha 
+git add -A - dodaje zmiany do stage
+git commit -m 'text' - commitowanie zmian
+git checkout -f - resetowanie zmian
+git clean -xfd -n - usuwa nowe pliki (z -n pierwsze pokazuje co usunie)
+

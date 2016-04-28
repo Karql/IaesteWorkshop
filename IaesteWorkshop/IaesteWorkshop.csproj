@@ -281,6 +281,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Stuff\Notes.txt" />
     <Content Include="Stuff\Theme\cinema-web\404.html" />
     <Content Include="Stuff\Theme\cinema-web\contact.html" />
     <Content Include="Stuff\Theme\cinema-web\css\bootstrap.css" />
